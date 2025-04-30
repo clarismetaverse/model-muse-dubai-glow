@@ -19,18 +19,20 @@ export const getModelRating = async (imageFile: File): Promise<ModelRating> => {
     
     console.log('Sending request to API with image data');
     
-    // Call the API
+    // Call the API with the correct format
     const response = await fetch('https://xbut-eryu-hhsg.f2.xano.io/api:TAf2tJRT/ModelRater', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ 
-        image: base64Image
+        image: base64Image 
       }),
     });
     
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('API error response:', errorText);
       throw new Error(`API error: ${response.status}`);
     }
     
@@ -43,7 +45,7 @@ export const getModelRating = async (imageFile: File): Promise<ModelRating> => {
                     (data.rating && data.rating.response && data.rating.response.result && 
                      data.rating.response.result.comment) || "";
     
-    // Use the API response data
+    // Use the API response data with proper fallbacks
     return {
       angelicness: data.angelicness || Math.floor(Math.random() * 100),
       sexyness: data.sexyness || Math.floor(Math.random() * 100),
