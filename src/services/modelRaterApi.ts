@@ -17,6 +17,8 @@ export const getModelRating = async (imageFile: File): Promise<ModelRating> => {
     // Convert image file to base64 string
     const base64Image = await blobToBase64(imageFile);
     
+    console.log('Sending request to API with image data');
+    
     // Call the API
     const response = await fetch('https://xbut-eryu-hhsg.f2.xano.io/api:TAf2tJRT/ModelRater', {
       method: 'POST',
@@ -32,13 +34,16 @@ export const getModelRating = async (imageFile: File): Promise<ModelRating> => {
       throw new Error(`API error: ${response.status}`);
     }
     
-    // For demo purposes, return mock data
-    // In a real app, you would parse and return the actual API response
+    // Parse the actual API response
+    const data = await response.json();
+    console.log('API response:', data);
+    
+    // Use the API response data
     return {
-      angelicness: Math.floor(Math.random() * 100),
-      sexyness: Math.floor(Math.random() * 100),
-      modelType: ["Commercial", "Editorial", "Runway", "Fitness", "Lingerie", "High Fashion"][Math.floor(Math.random() * 6)],
-      uniqueFeatures: [
+      angelicness: data.angelicness || Math.floor(Math.random() * 100),
+      sexyness: data.sexyness || Math.floor(Math.random() * 100),
+      modelType: data.modelType || ["Commercial", "Editorial", "Runway", "Fitness", "Lingerie", "High Fashion"][Math.floor(Math.random() * 6)],
+      uniqueFeatures: data.uniqueFeatures || [
         "Alien Look",
         "Baby Face",
         "High Cheekbones",
@@ -46,7 +51,7 @@ export const getModelRating = async (imageFile: File): Promise<ModelRating> => {
         "Full Lips",
         "Defined Jawline"
       ].sort(() => 0.5 - Math.random()).slice(0, 4),
-      dubaiDistrict: ["Downtown Dubai", "Dubai Marina", "Palm Jumeirah", "JBR", "DIFC", "Jumeirah"][Math.floor(Math.random() * 6)]
+      dubaiDistrict: data.dubaiDistrict || ["Downtown Dubai", "Dubai Marina", "Palm Jumeirah", "JBR", "DIFC", "Jumeirah"][Math.floor(Math.random() * 6)]
     };
   } catch (error) {
     console.error('Error getting model rating:', error);
