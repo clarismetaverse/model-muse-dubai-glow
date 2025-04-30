@@ -38,6 +38,11 @@ export const getModelRating = async (imageFile: File): Promise<ModelRating> => {
     const data = await response.json();
     console.log('API response:', data);
     
+    // Extract comments from the response if available
+    const comments = data.comments || data.comment || 
+                    (data.rating && data.rating.response && data.rating.response.result && 
+                     data.rating.response.result.comment) || "";
+    
     // Use the API response data
     return {
       angelicness: data.angelicness || Math.floor(Math.random() * 100),
@@ -51,7 +56,8 @@ export const getModelRating = async (imageFile: File): Promise<ModelRating> => {
         "Full Lips",
         "Defined Jawline"
       ].sort(() => 0.5 - Math.random()).slice(0, 4),
-      dubaiDistrict: data.dubaiDistrict || ["Downtown Dubai", "Dubai Marina", "Palm Jumeirah", "JBR", "DIFC", "Jumeirah"][Math.floor(Math.random() * 6)]
+      dubaiDistrict: data.dubaiDistrict || ["Downtown Dubai", "Dubai Marina", "Palm Jumeirah", "JBR", "DIFC", "Jumeirah"][Math.floor(Math.random() * 6)],
+      comments: comments
     };
   } catch (error) {
     console.error('Error getting model rating:', error);

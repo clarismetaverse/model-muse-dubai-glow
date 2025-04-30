@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Star, MapPin, Award } from 'lucide-react';
+import { Star, MapPin, Award, MessageCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export interface ModelRating {
@@ -9,6 +9,7 @@ export interface ModelRating {
   modelType: string;
   uniqueFeatures: string[];
   dubaiDistrict: string;
+  comments?: string;
 }
 
 interface ResultsCardProps {
@@ -78,6 +79,19 @@ const ResultsCard: React.FC<ResultsCardProps> = ({ rating, className }) => {
           </div>
         </div>
       </div>
+      
+      {/* Comments */}
+      {rating.comments && (
+        <div className="mt-5 border-t border-white/10 pt-4">
+          <div className="flex items-start">
+            <MessageCircle className="w-4 h-4 mr-2 text-primary mt-1 flex-shrink-0" />
+            <div>
+              <div className="text-sm font-medium mb-1">Feedback</div>
+              <p className="text-sm text-muted-foreground">{rating.comments}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
