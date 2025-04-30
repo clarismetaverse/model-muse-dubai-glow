@@ -20,31 +20,14 @@ export const getModelRating = async (imageFile: File): Promise<ModelRating> => {
     console.log('Base64 image start:', base64Image.substring(0, 50), '...');
     console.log('Image size in bytes:', imageFile.size);
     
-    // Format the request payload as expected by the API
-    // Based on the error message, it seems the API expects a specific structure
+    // Create a simple payload with just the base64 image
     const payload = {
-      messages: [
-        {
-          role: "user",
-          content: [
-            {
-              type: "text",
-              text: "Analyze this model image"
-            },
-            {
-              type: "image_url",
-              image_url: {
-                url: base64Image
-              }
-            }
-          ]
-        }
-      ]
+      image: base64Image
     };
     
-    console.log('Sending request to API with properly formatted payload');
+    console.log('Sending request to API with simplified payload');
     
-    // Call the API with the correct structure
+    // Call the API with the simpler structure
     const response = await fetch('https://xbut-eryu-hhsg.f2.xano.io/api:TAf2tJRT/ModelRater', {
       method: 'POST',
       headers: {
