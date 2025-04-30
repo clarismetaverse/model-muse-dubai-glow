@@ -17,17 +17,40 @@ export const getModelRating = async (imageFile: File): Promise<ModelRating> => {
     // Convert image file to base64 string
     const base64Image = await blobToBase64(imageFile);
     
-    console.log('Sending request to API with image data');
+    console.log('Base64 image start:', base64Image.substring(0, 50), '...');
+    console.log('Image size in bytes:', imageFile.size);
     
-    // Call the API with the correct format
+    // Format the request payload as expected by the API
+    // Based on the error message, it seems the API expects a specific structure
+    const payload = {
+      messages: [
+        {
+          role: "user",
+          content: [
+            {
+              type: "text",
+              text: "Analyze this model image"
+            },
+            {
+              type: "image_url",
+              image_url: {
+                url: base64Image
+              }
+            }
+          ]
+        }
+      ]
+    };
+    
+    console.log('Sending request to API with properly formatted payload');
+    
+    // Call the API with the correct structure
     const response = await fetch('https://xbut-eryu-hhsg.f2.xano.io/api:TAf2tJRT/ModelRater', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ 
-        image: base64Image 
-      }),
+      body: JSON.stringify(payload),
     });
     
     if (!response.ok) {
