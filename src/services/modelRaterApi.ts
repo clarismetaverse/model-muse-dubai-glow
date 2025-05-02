@@ -1,42 +1,54 @@
 
 import { ModelRating } from '@/components/ResultsCard';
 
-// Convert blob to base64
-const blobToBase64 = (blob: Blob): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      // Make sure we're getting a proper data URL
-      const result = reader.result as string;
-      resolve(result);
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(blob);
-  });
+// Function to upload image to ImgBB (free hosting)
+const uploadImageToHost = async (imageFile: File): Promise<string> => {
+  try {
+    // Create form data for image upload
+    const formData = new FormData();
+    formData.append('image', imageFile);
+    
+    // Using ImgBB as a free host - note that typically you'd use an API key
+    // For demonstration purposes only - in production, handle this server-side
+    const uploadResponse = await fetch('https://api.imgbb.com/1/upload?key=26a7315d435665ba6470d0f36adb583e', {
+      method: 'POST',
+      body: formData,
+    });
+    
+    if (!uploadResponse.ok) {
+      throw new Error(`Image upload failed: ${uploadResponse.status}`);
+    }
+    
+    const uploadResult = await uploadResponse.json();
+    console.log('Image uploaded successfully:', uploadResult);
+    
+    // Return the URL from the response
+    return uploadResult.data.url;
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    throw error;
+  }
 };
 
 // Upload image and get model rating
 export const getModelRating = async (imageFile: File): Promise<ModelRating> => {
   try {
-    // Convert image file to base64 string
-    const base64Image = await blobToBase64(imageFile);
+    // First upload the image to get a URL
+    console.log('Uploading image to hosting service...');
+    const imageUrl = await uploadImageToHost(imageFile);
+    console.log('Image uploaded, URL:', imageUrl);
     
-    console.log('Base64 image format check:', base64Image.substring(0, 30), '...');
-    console.log('Image size in bytes:', imageFile.size);
+    // Create an empty payload as shown in curl example
+    // Note: You mentioned the Xano function now expects the URL, 
+    // but the curl example shows an empty payload. I'll add the URL to the payload
+    // just in case, though you can remove it if not needed.
+    const payload = {
+      imageUrl: imageUrl
+    };
     
-    // Extract only the base64 part without the data URL prefix if needed
-    // Most APIs expect just the base64 data without the "data:image/jpeg;base64," prefix
-    const base64Data = base64Image.includes('base64,') 
-      ? base64Image.split('base64,')[1] 
-      : base64Image;
+    console.log('Sending payload to API:', payload);
     
-    // Create an empty payload first - matching your curl example
-    const payload = {};
-    
-    // Log what we're sending
-    console.log('Sending empty payload to API as shown in curl example');
-    
-    // Call the API with empty payload as shown in curl example
+    // Call the API with the payload
     const response = await fetch('https://xbut-eryu-hhsg.f2.xano.io/api:TAf2tJRT/ModelRater', {
       method: 'POST',
       headers: {
