@@ -1,19 +1,8 @@
-
-import { ModelRating } from '@/components/ResultsCard';
-// src/services/modelRaterApi.ts
-
-export interface ModelRating {
-  angelicness: number;
-  sexyness: number;
-  modelType: string;
-  uniqueFeatures: string[];
-  dubaiDistrict: string;
-  comments: string;
-}
-
 export const getModelRating = async (imageFile: File): Promise<ModelRating> => {
   try {
-    // Step 1: Upload image to freeimage.host
+    console.log("🔄 Uploading image to freeimage.host...");
+    console.log("📸 File:", imageFile);
+
     const formData = new FormData();
     formData.append("source", imageFile);
     formData.append("type", "file");
@@ -24,13 +13,18 @@ export const getModelRating = async (imageFile: File): Promise<ModelRating> => {
     });
 
     const uploadResult = await uploadResponse.json();
-    const imageUrl = uploadResult?.image?.url;
+    console.log("✅ Upload result:", uploadResult);
+
+    // Handle both possible image URL fields
+    const imageUrl = uploadResult?.image?.url || uploadResult?.image?.display_url;
 
     if (!imageUrl) {
-      throw new Error("Image upload failed");
+      console.error("❌ Failed to get image URL from upload result.");
+      throw new Error("Image upload succeeded but no URL was returned.");
     }
 
-    // Step 2: Send image URL to Xano
+    console.log("🌐 Sending image URL to Xano:", imageUrl);
+
     const response = await fetch("https://xbut-eryu-hhsg.f2.xano.io/api:TAf2tJRT/ModelRater", {
       method: "POST",
       headers: {
@@ -39,14 +33,17 @@ export const getModelRating = async (imageFile: File): Promise<ModelRating> => {
       body: JSON.stringify({ url: imageUrl }),
     });
 
+    console.log("📨 Xano response status:", response.status);
+
     if (!response.ok) {
       const errorText = await response.text();
-      throw new Error(`Xano error: ${response.status} — ${errorText}`);
+      console.error("❌ Xano error response:", errorText);
+      throw new Error(`Xano API error: ${response.status}`);
     }
 
     const data = await response.json();
+    console.log("✅ Xano response data:", data);
 
-    // Step 3: Extract and return model rating
     return {
       angelicness: data.angelicness || 0,
       sexyness: data.sexyness || 0,
@@ -56,7 +53,7 @@ export const getModelRating = async (imageFile: File): Promise<ModelRating> => {
       comments: data.comments || "",
     };
   } catch (error) {
-    console.error("Error getting model rating:", error);
+    console.error("🚨 getModelRating error:", error);
     throw error;
   }
 };
