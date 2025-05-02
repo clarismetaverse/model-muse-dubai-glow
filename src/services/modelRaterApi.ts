@@ -13,7 +13,16 @@ export const getModelRating = async (imageFile: File): Promise<ModelRating> => {
     });
 
     const uploadResult = await uploadResponse.json();
-    console.log("✅ Upload result:", uploadResult);
+
+    console.log("🧾 Raw upload response:", uploadResult);
+
+const imageUrl =
+  uploadResult?.image?.url ||
+  uploadResult?.image?.display_url ||
+  uploadResult?.image?.image?.url;
+
+console.log("📸 Final image URL:", imageUrl);
+
 
     // Handle both possible image URL fields
     const imageUrl = uploadResult?.image?.url || uploadResult?.image?.display_url;
