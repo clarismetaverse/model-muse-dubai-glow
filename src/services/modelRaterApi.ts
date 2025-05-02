@@ -8,9 +8,8 @@ const uploadImageToHost = async (imageFile: File): Promise<string> => {
     const formData = new FormData();
     formData.append('image', imageFile);
     
-    // Using ImgBB as a free host - note that typically you'd use an API key
-    // For demonstration purposes only - in production, handle this server-side
-    const uploadResponse = await fetch('https://api.imgbb.com/1/upload?key=26a7315d435665ba6470d0f36adb583e', {
+    // Using ImgBB as a free host with a newer API key
+    const uploadResponse = await fetch('https://api.imgbb.com/1/upload?key=f8a8845df79baf959d82ca863caf0dac', {
       method: 'POST',
       body: formData,
     });
@@ -39,12 +38,8 @@ export const getModelRating = async (imageFile: File): Promise<ModelRating> => {
     console.log('Image uploaded, URL:', imageUrl);
     
     // Create an empty payload as shown in curl example
-    // Note: You mentioned the Xano function now expects the URL, 
-    // but the curl example shows an empty payload. I'll add the URL to the payload
-    // just in case, though you can remove it if not needed.
-    const payload = {
-      imageUrl: imageUrl
-    };
+    // Since the curl example shows an empty payload, we'll follow that exactly
+    const payload = {};
     
     console.log('Sending payload to API:', payload);
     
