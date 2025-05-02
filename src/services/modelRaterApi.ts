@@ -1,15 +1,16 @@
 
 import { ModelRating } from '@/components/ResultsCard';
 
-// Function to upload image to ImgBB (free hosting)
+// Function to upload image to freeimage.host
 const uploadImageToHost = async (imageFile: File): Promise<string> => {
   try {
     // Create form data for image upload
     const formData = new FormData();
-    formData.append('image', imageFile);
+    formData.append('source', imageFile);
+    formData.append('key', '6d207e02198a847aa98d0a2a901485a5'); // API key for freeimage.host
     
-    // Using ImgBB as a free host with a newer API key
-    const uploadResponse = await fetch('https://api.imgbb.com/1/upload?key=f8a8845df79baf959d82ca863caf0dac', {
+    // Using freeimage.host as requested
+    const uploadResponse = await fetch('https://freeimage.host/api/1/upload', {
       method: 'POST',
       body: formData,
     });
@@ -21,8 +22,8 @@ const uploadImageToHost = async (imageFile: File): Promise<string> => {
     const uploadResult = await uploadResponse.json();
     console.log('Image uploaded successfully:', uploadResult);
     
-    // Return the URL from the response
-    return uploadResult.data.url;
+    // Return the URL from the response - adjust this path based on actual response structure
+    return uploadResult.image.url;
   } catch (error) {
     console.error('Error uploading image:', error);
     throw error;
