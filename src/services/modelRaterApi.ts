@@ -11,7 +11,7 @@ export const getModelRating = async (imageFile: File): Promise<ModelRating> => {
 
     console.log("🌐 Sending image directly to Xano API");
 
-    const response = await fetch("https://xbut-eryu-hhsg.f2.xano.io/api:TAf2tJRT/ModelRater", {
+    const response = await fetch("https://xbut-eryu-hhsg.f2.xano.io/api:TAf2tJRT/SendPicModelRater", {
       method: "POST",
       body: formData, // Send the FormData with the image file
     });
