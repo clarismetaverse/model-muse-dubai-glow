@@ -1,45 +1,17 @@
+
 export const getModelRating = async (imageFile: File): Promise<ModelRating> => {
   try {
-    console.log("🔄 Uploading image to freeimage.host...");
-    console.log("📸 File:", imageFile);
+    console.log("📸 Processing image file:", imageFile);
 
+    // Create a FormData object to send the image directly to Xano
     const formData = new FormData();
-    formData.append("source", imageFile);
-    formData.append("type", "file");
+    formData.append("Picture", imageFile);
 
-    const uploadResponse = await fetch("https://freeimage.host/api/1/upload?key=6d207e02198a847aa98d0a2a901485a5", {
-      method: "POST",
-      body: formData,
-    });
-
-    const uploadResult = await uploadResponse.json();
-
-    console.log("🧾 Raw upload response:", uploadResult);
-
-const imageUrl =
-  uploadResult?.image?.url ||
-  uploadResult?.image?.display_url ||
-  uploadResult?.image?.image?.url;
-
-console.log("📸 Final image URL:", imageUrl);
-
-
-    // Handle both possible image URL fields
-    const imageUrl = uploadResult?.image?.url || uploadResult?.image?.display_url;
-
-    if (!imageUrl) {
-      console.error("❌ Failed to get image URL from upload result.");
-      throw new Error("Image upload succeeded but no URL was returned.");
-    }
-
-    console.log("🌐 Sending image URL to Xano:", imageUrl);
+    console.log("🌐 Sending image directly to Xano API");
 
     const response = await fetch("https://xbut-eryu-hhsg.f2.xano.io/api:TAf2tJRT/ModelRater", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ url: imageUrl }),
+      body: formData, // Send the FormData with the image file
     });
 
     console.log("📨 Xano response status:", response.status);
