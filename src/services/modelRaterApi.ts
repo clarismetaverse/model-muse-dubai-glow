@@ -1,4 +1,6 @@
 
+import { ModelRating } from '@/components/ResultsCard';
+
 export const getModelRating = async (imageFile: File): Promise<ModelRating> => {
   try {
     console.log("📸 Processing image file:", imageFile);
