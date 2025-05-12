@@ -1,6 +1,14 @@
 
 import { ModelRating } from '@/components/ResultsCard';
 
+// Define an interface for the parsed JSON data structure
+interface ModelRatingData {
+  angelicness?: number;
+  sexyness?: number;
+  "model agency rate"?: string;
+  "look unique features"?: string;
+}
+
 export const getModelRating = async (imageFile: File): Promise<ModelRating> => {
   try {
     console.log("📸 Processing image file:", imageFile);
@@ -32,11 +40,11 @@ export const getModelRating = async (imageFile: File): Promise<ModelRating> => {
     
     // Extract the JSON part from the response
     const jsonMatch = respContent.match(/```json\n([\s\S]*?)\n```/);
-    let jsonData = {};
+    let jsonData: ModelRatingData = {};
     
     if (jsonMatch && jsonMatch[1]) {
       try {
-        jsonData = JSON.parse(jsonMatch[1]);
+        jsonData = JSON.parse(jsonMatch[1]) as ModelRatingData;
         console.log("📊 Parsed JSON data:", jsonData);
       } catch (e) {
         console.error("❌ Failed to parse JSON part:", e);
