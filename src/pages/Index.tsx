@@ -62,7 +62,7 @@ const Index = () => {
         
         {!results && !isLoading && (
           <div className="glass-card p-5 text-center mt-8">
-            <h2 className="text-lg font-semibold mb-2 sexy-gradient">Welcome to DubaiMuse</h2>
+            <h2 className="text-lg font-semibold mb-2 sexy-gradient">Welcome to Modelrater</h2>
             <p className="text-sm text-muted-foreground">
               Upload your photo to discover your modeling potential and the perfect Dubai district for your lifestyle
             </p>
