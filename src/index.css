@@ -11,9 +11,9 @@
     --card-foreground: 0 0% 98%;
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
-    --primary: 262 85% 73%;
+    --primary: 348 100% 61%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 292 84% 61%;
+    --secondary: 348 100% 56%;
     --secondary-foreground: 0 0% 100%;
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 84.9%;
@@ -54,14 +54,14 @@
   }
 
   .dubai-gold-text {
-    @apply text-dubai-gold font-semibold;
+    @apply text-[#FF385C] font-semibold;
   }
   
   .sexy-gradient {
-    @apply bg-gradient-to-r from-primary via-secondary to-accent text-transparent bg-clip-text;
+    @apply bg-gradient-to-r from-[#FF385C] via-[#FF385C] to-[#FF385C] text-transparent bg-clip-text;
   }
   
   .value-circle {
-    @apply rounded-full flex items-center justify-center bg-gradient-to-br from-dubai-gold to-dubai-sand text-black font-bold;
+    @apply rounded-full flex items-center justify-center bg-gradient-to-br from-[#FF385C] to-[#FF1D49] text-white font-bold;
   }
 }
